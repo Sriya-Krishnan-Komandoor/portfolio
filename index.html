@@ -1,471 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
-  <!-- Meta -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sriya Krishnan Komandoor | Profile</title>
-  <meta name="description" content="Portfolio of Sriya Krishnan Komandoor - AI Engineer & Developer">
-  <meta name="keywords" content="Sriya Komandoor, AI Engineer, Developer, Portfolio, Vilnius Tech">
-  <meta name="author" content="Sriya Krishnan Komandoor">
-  <meta name="color-scheme" content="dark">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Lighting Control</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  <!-- Favicons -->
-  <link href="img/favicon.png" rel="icon">
-  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+        }
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Raleway:wght@300;400;600;700;900&family=Mulish:wght@300;400;600;700;900&display=swap"
-    rel="stylesheet">
+        .main-header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 20px;
+        }
 
-  <!-- Vendor CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="vendor/aos/aos.css" rel="stylesheet">
-  <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+        .main-header h1 {
+            font-size: 3rem;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  <!-- Custom & Main CSS -->
-<link href="main.css" rel="stylesheet">
-<link href="custom.css" rel="stylesheet">
+        .main-header p {
+            color: #aaaaaa;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
 
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-  <!-- Name Pronunciation Button Styling -->
-  <style>
-    .name-pronunciation {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+        .room-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .play-name-btn {
-      width: 32px;
-      height: 32px;
-      background: var(--accent-color);
-      border: none;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #fff;
-      transition: 0.3s;
-    }
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+        }
 
-    .play-name-btn:hover {
-      transform: scale(1.1);
-    }
-  </style>
+        .room-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            color: #ffd200;
+        }
+
+        .room-image-container {
+            width: 100%;
+            height: 250px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .room-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.4s ease;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toggle-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #000;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 210, 0, 0.3);
+        }
+
+        .toggle-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(255, 210, 0, 0.5);
+        }
+
+        .toggle-btn.off {
+            background: linear-gradient(135deg, #555, #777);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            appearance: none;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(255, 210, 0, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            width: 26px;
+            height: 26px;
+            box-shadow: 0 4px 15px rgba(255, 210, 0, 0.7);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 10px rgba(255, 210, 0, 0.5);
+        }
+
+        input[type="range"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+<body>
+    <header class="main-header">
+        <h1>🏠 SMART HOME LIGHTING</h1>
+        <p>Control Your Room Lighting Intensity</p>
+    </header>
 
-<body class="index-page">
-
-  <!-- Header -->
-  <header id="header" class="header fixed-top">
-    <div class="container d-flex align-items-center justify-content-between">
-      <h1 class="logo"><a href="#hero">My Profile</a></h1>
-
-      <nav id="navmenu">
-        <ul>
-          <li><a href="#hero" class="active">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li class="dropdown">
-            <a href="#" class="toggle-dropdown">Resume <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="resume.html">View Resume</a></li>
-              <li><a href="CV-OCT2025.pdf">Download CV</a></li>
-            </ul>
-          </li>
-          <li><a href="#portfolio">Portfolio</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <section id="hero" class="hero dark-background">
-    <img src="img/pictureeee.jpg" alt="Sriya portrait" data-aos="fade-in">
-
-    <div class="hero-overlay" data-aos="fade-up">
-      <h1 class="hero-name">Sriya Krishnan Komandoor</h1>
-      <h2>Hey, I'm Sriya</h2>
-      <p>
-        I'm
-        <span
-          class="typed"
-          data-typed-items="engineering in AI,working in an AI company,building HerBridge,IT Committee member at ESN">
-        </span>
-      </p>
-
-      <div class="social-links">
-        <a href="#"><i class="bi bi-instagram"></i></a>
-        <a href="#"><i class="bi bi-github"></i></a>
-        <a href="https://www.linkedin.com/in/sriyakomandoor/" target="_blank">
-          <i class="bi bi-linkedin"></i>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about" class="about section">
-    <div class="container section-title" data-aos="fade-up">
-      <h2>About Me</h2>
-      <p>
-        I'm from India and currently based in Lithuania.  
-        I love building impactful digital products and working under pressure.
-      </p>
-    </div>
-
-    <div class="container">
-      <div class="row gy-5">
-
-        <!-- Profile Card -->
-        <div class="col-lg-3">
-          <div class="profile-card">
-            <img src="img/Screenshot 2025-12-04 175038.png" class="img-fluid rounded" alt="Profile photo">
-
-            <div class="name-pronunciation mt-3">
-              <h3>Sriya Krishnan Komandoor</h3>
-              <button class="play-name-btn" onclick="playNamePronunciation()">
-                <i class="bi bi-play-fill"></i>
-              </button>
+    <div class="dashboard">
+        <div class="room-card">
+            <h2>Living Room</h2>
+            <div class="room-image-container">
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&h=600&fit=crop" 
+                     class="room-image" 
+                     id="living-image"
+                     alt="Living Room">
             </div>
-
-            <p class="role">AI Systems Student · Vilnius Tech</p>
-
-            <a href="CV-OCT2025.pdf" class="btn btn-primary w-100 mt-3">
-              <i class="bi bi-download"></i> Download CV
-            </a>
-          </div>
-        </div>
-
-        <!-- About Content -->
-        <div class="col-lg-4">
-          <h3>Transforming Ideas into Digital Reality</h3>
-          <p>
-            I enjoy converting complex problems into elegant, scalable solutions.
-            My focus areas include AI systems, software engineering, and social impact platforms.
-          </p>
-
-          <ul class="list-unstyled">
-            <li><i class="bi bi-geo-alt"></i> Lithuania</li>
-            <li><i class="bi bi-envelope"></i> sriya.komandoor@email.com</li>
-            <li><i class="bi bi-calendar-check"></i> Open to work</li>
-          </ul>
-        </div>
-
-        <!-- Skills -->
-        <div class="col-lg-5">
-          <div class="skills-animation skills-list">
-            <div class="skill-item">
-              <div class="skill-info">
-                <span>Artificial Intelligence</span>
-                <span>85%</span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar"
-                     aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+            <div class="controls">
+                <button class="toggle-btn" id="living-btn" onclick="toggleLight('living')">
+                    💡 TURN OFF
+                </button>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Brightness</span>
+                        <span id="living-value">70%</span>
+                    </div>
+                    <input type="range" 
+                           id="living-slider"
+                           min="0" 
+                           max="100" 
+                           value="70"
+                           oninput="changeBrightness('living', this.value)">
                 </div>
-              </div>
             </div>
+        </div>
 
-            <div class="skill-item">
-              <div class="skill-info">
-                <span>Software Engineering</span>
-                <span>80%</span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar"
-                     aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+        <div class="room-card">
+            <h2>Bedroom</h2>
+            <div class="room-image-container">
+                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=600&fit=crop" 
+                     class="room-image" 
+                     id="bedroom-image"
+                     alt="Bedroom">
+            </div>
+            <div class="controls">
+                <button class="toggle-btn" id="bedroom-btn" onclick="toggleLight('bedroom')">
+                    💡 TURN OFF
+                </button>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Brightness</span>
+                        <span id="bedroom-value">70%</span>
+                    </div>
+                    <input type="range" 
+                           id="bedroom-slider"
+                           min="0" 
+                           max="100" 
+                           value="70"
+                           oninput="changeBrightness('bedroom', this.value)">
                 </div>
-              </div>
             </div>
+        </div>
 
-            <div class="skill-item">
-              <div class="skill-info">
-                <span>Web Development</span>
-                <span>75%</span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar"
-                     aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+        <div class="room-card">
+            <h2>Kitchen</h2>
+            <div class="room-image-container">
+                <img src="https://images.unsplash.com/photo-1556912173-46c336c7fd55?w=800&h=600&fit=crop" 
+                     class="room-image" 
+                     id="kitchen-image"
+                     alt="Kitchen">
+            </div>
+            <div class="controls">
+                <button class="toggle-btn" id="kitchen-btn" onclick="toggleLight('kitchen')">
+                    💡 TURN OFF
+                </button>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Brightness</span>
+                        <span id="kitchen-value">70%</span>
+                    </div>
+                    <input type="range" 
+                           id="kitchen-slider"
+                           min="0" 
+                           max="100" 
+                           value="70"
+                           oninput="changeBrightness('kitchen', this.value)">
                 </div>
-              </div>
             </div>
-
-            <div class="skill-item">
-              <div class="skill-info">
-                <span>Problem Solving</span>
-                <span>90%</span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar" role="progressbar"
-                     aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Resume -->
-  <section id="resume" class="resume section">
-    <div class="container section-title">
-      <h2>Resume</h2>
-      <p>My academic and professional journey</p>
     </div>
 
-    <div class="container">
-      <h3>Summary</h3>
-      <p>A student aspiring to enter a professional working space. Having gained experience in programming languages, communications and problem-solving techniques, I am very eager to put them to use in any organization.</p>
+    <script>
+        const lightState = {
+            living: true,
+            bedroom: true,
+            kitchen: true
+        };
 
-      <h3>Skills</h3>
-      <ul>
-        <li>C++, Java, Python, SQL, MATLAB, VHDL, AutoCAD</li>
-        <li>Communication, Problem-solving, Computer animation</li>
-        <li>Critical Thinking, Time management, Lesson planning</li>
-        <li>Leadership, Creative writing</li>
-      </ul>
+        function toggleLight(room) {
+            lightState[room] = !lightState[room];
+            const image = document.getElementById(room + '-image');
+            const button = document.getElementById(room + '-btn');
+            const slider = document.getElementById(room + '-slider');
 
-      <h3>Experience</h3>
-      <div class="resume-item">
-        <h4>Hack4Vilnius | Value Bridge</h4>
-        <p><strong>October 2025</strong></p>
-        <p>Pitching and creating an AI-powered career consultant application.</p>
-      </div>
-      <div class="resume-item">
-        <h4>MERIThON | MERiT</h4>
-        <p><strong>September 2025</strong></p>
-        <p>Programming an extension and prototyping against Jailbreaking attempts.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Project HerBridge | Technical Research and Early Prototyping</h4>
-        <p><strong>May 2025 - July 2025</strong></p>
-        <p>EIT Health | Boehringer Ingelheim.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Development in Python [DSA] and Development in Java backend</h4>
-        <p><strong>Feb 2025 - Ongoing</strong></p>
-        <p>GeeksforGeeks.</p>
-      </div>
-      <div class="resume-item">
-        <h4>#b_hack AI goes borderline #EdgeAI-engineered a device | Walkey</h4>
-        <p><strong>July 2025</strong></p>
-        <p>Baltic Sea region Hackathon 2025 | Lübeck, Germany.</p>
-      </div>
-      <div class="resume-item">
-        <h4>MERIThON | MERiT</h4>
-        <p><strong>Nov 2024</strong></p>
-        <p>Test Case Derivative from Generative AI.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Good Project | Project Zero</h4>
-        <p><strong>Sept 2023 - May 2024</strong></p>
-        <p>Harvard Graduate School of Education.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Design & AI workshop</h4>
-        <p><strong>Jan 2024</strong></p>
-        <p>Strate School of Design.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Basic Analytical Techniques in Molecular Biology</h4>
-        <p><strong>Nov 2023</strong></p>
-        <p>Mount Caramel College.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Data Analytics Internship</h4>
-        <p><strong>Jun 2023 - Sept 2023</strong></p>
-        <p>Schiphics.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Primary School aid with Visualisation Techniques</h4>
-        <p><strong>Aug 2022 - May 2024</strong></p>
-        <p>Legacy School Bangalore.</p>
-      </div>
-      <div class="resume-item">
-        <h4>Code – India - Code | Bootcamp</h4>
-        <p><strong>Jan 2023</strong></p>
-        <p>Wissenaire IIT Bhubaneswar.</p>
-      </div>
+            if (lightState[room]) {
+                // Light is ON - use slider value
+                const brightness = slider.value / 100;
+                image.style.filter = `brightness(${brightness})`;
+                button.textContent = '💡 TURN OFF';
+                button.classList.remove('off');
+                slider.disabled = false;
+            } else {
+                // Light is OFF - make it dark
+                image.style.filter = 'brightness(0.2)';
+                button.textContent = '💡 TURN ON';
+                button.classList.add('off');
+                slider.disabled = true;
+            }
+        }
 
-      <h3>Education</h3>
-      <div class="resume-item">
-        <h4>Bachelor of Engineering Sciences in Informatics Engineering-Artificial Intelligence Systems</h4>
-        <p><strong>Vilnius Gediminas Technical University</strong> (Started September 2024)</p>
-      </div>
-      <div class="resume-item">
-        <h4>Top Female Founders Summer School-Entrepreneurship</h4>
-        <p><strong>EIT Health and Boehringer Ingelheim</strong> (May 2025 - July 2025)</p>
-      </div>
-      <div class="resume-item">
-        <h4>Cambridge AICE Diploma</h4>
-        <p><strong>Legacy School Bangalore</strong> (June 2022 – May 2024)</p>
-      </div>
-      <div class="resume-item">
-        <h4>Indian Certificate of Secondary Education</h4>
-        <p><strong>Trio World School</strong> (June 2015 – March 2022)</p>
-      </div>
-    </div>
-  </section>
+        function changeBrightness(room, value) {
+            if (!lightState[room]) return;
 
-  <!-- Portfolio -->
-  <section id="portfolio" class="portfolio section">
-    <div class="container section-title">
-      <h2>Portfolio</h2>
-      <p>Some projects I’m proud of</p>
-    </div>
-
-    <div class="container">
-      <div class="row gy-4">
-        <div class="col-lg-4">
-          <img src="img/image.png" class="img-fluid" alt="ValueBridge">
-          <h4>ValueBridge</h4>
-          <p>A platform that bridges employees and employers by aligning values and cultures for better workplace matches and harmony.</p>
-        </div>
-        <div class="col-lg-4">
-          <img src="img/IMAGEieie.png" class="img-fluid" alt="Walkey">
-          <h4>Walkey</h4>
-          <p>A mobile app designed to track walking activities, promote healthy lifestyles, and gamify fitness goals.</p>
-        </div>
-        <div class="col-lg-4">
-          <img src="img/Screenshot 2025-12-04 215946.png" class="img-fluid" alt="HerBridge">
-          <h4>HerBridge</h4>
-          <p>A platform connecting women in tech, fostering mentorship, networking, and community building opportunities.</p>
-        </div>
-         <div class="col-lg-4">
-          <img src="img/image.png" class="img-fluid" alt="ValueBridge">
-          <a href="hw.html">
-            <h4>Smart home lighting setup</h4>
-          </a>
-          <p>Smart home lighting setup with adjustable brightness.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-<!-- Memory Game -->
-<section id="memory-game" class="section">
-  <div class="container">
-    <h2>Memory Game</h2>
-
-    <div class="controls mb-3">
-      <label for="difficulty">Difficulty:</label>
-      <select id="difficulty">
-        <option value="easy">Easy</option>
-        <option value="hard">Hard</option>
-      </select>
-
-      <button id="startGame" class="btn btn-primary">Start</button>
-      <button id="restartGame" class="btn btn-secondary">Restart</button>
-    </div>
-
-    <div class="stats mb-3">
-      <span>Moves: <strong id="moves">0</strong></span> |
-      <span>Matches: <strong id="matches">0</strong></span> |
-      <span>Time: <strong id="timer">0</strong>s</span> |
-      <span>Best: <strong id="bestScore">—</strong></span>
-    </div>
-
-    <div id="gameBoard"></div>
-
-    <p id="winMessage" class="mt-3 fw-bold"></p>
-  </div>
-</section>
-<div class="container mt-5" data-aos="fade-up">
-        <h3 class="text-center mb-4">VIDEO </h3>
-        <div class="row gy-4 justify-content-center">
-          <div class="col-lg-8">
-            <div class="media-block mb-5">
-  
-              <video class="w-100" controls>
-                <source src="intro.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-<div class="media-block mb-5">
-              <h4>YouTube Video Embed</h4>
-              <div class="ratio ratio-16x9">
-                <iframe src="https://www.youtube.com/embed/KOW0hOw9WMQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            const image = document.getElementById(room + '-image');
+            const valueDisplay = document.getElementById(room + '-value');
+            const brightness = value / 100;
             
+            image.style.filter = `brightness(${brightness})`;
+            valueDisplay.textContent = value + '%';
+        }
 
-  <!-- Contact -->
-  <section id="contact" class="section">
-    <div class="container">
-      <h2>Contact</h2>
-
-      <!-- From Uiverse.io by guilhermeyohan --> 
-
-<form class="form">
-  
-    <label for="nome">Name:</label>
-    
-      <input type="text" class="infos" id="nome" name="nome">
-    <div class="mario"></div>
-      <label for="email">E-mail:</label>
-      <input type="email" id="email" name="email">
-
-      <button type="submit">Send</button>
-      <button type="reset" id="limpar">Clear</button>
-
-
-</form>
-      
-      <div id="formResult"></div>
-    </div>
-  </section>
-  
-
-  <!-- Footer -->
-  <footer class="footer text-center">
-    <div class="social-links">
-      <a href="#"><i class="bi bi-instagram"></i></a>
-      <a href="#"><i class="bi bi-github"></i></a>
-      <a href="https://www.linkedin.com/in/sriyakomandoor/" target="_blank">
-        <i class="bi bi-linkedin"></i>
-      </a>
-    </div>
-    <p>© 2025 Sriya Krishnan Komandoor</p>
-  </footer>
-
-  <!-- Audio -->
-  <audio id="namePronunciation">
-    <source src="audio/name-pronunciation.mp3" type="audio/mpeg">
-  </audio>
-
-  
-
-  </video>
-  <!-- Scripts -->
-  <script>
-    function playNamePronunciation() {
-      document.getElementById('namePronunciation').play();
-    }
-  </script>
-
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="vendor/aos/aos.js"></script>
-  <script src="vendor/typed.js/typed.umd.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-
-  <script src="main.js"></script>
-  <script src="custom.js"></script>
-
-
+        // Initialize all images with default brightness
+        window.onload = function() {
+            ['living', 'bedroom', 'kitchen'].forEach(room => {
+                const image = document.getElementById(room + '-image');
+                image.style.filter = 'brightness(0.7)';
+            });
+        };
+    </script>
 </body>
 </html>
