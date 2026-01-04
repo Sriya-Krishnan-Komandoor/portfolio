@@ -197,23 +197,44 @@ a:hover {
 }
 
 /* =========================
-   LOADER
+   PRELOADER / LOADER
 ========================= */
 
 #preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: var(--bg-main);
-  display: grid;
-  place-items: center;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #preloader::after {
   content: "";
-  width: 40px;
-  height: 40px;
-  border: 4px solid #2a2f42;
-  border-top-color: var(--accent-color);
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  background: conic-gradient(
+    from 0deg,
+    var(--accent-color),
+    #9fb7ff,
+    var(--accent-color)
+  );
+  animation: spin 1.5s linear infinite;
+  mask: radial-gradient(
+    circle,
+    transparent 45%,
+    black 45%
+  );
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent 45%,
+    black 45%
+  );
 }
 
 @keyframes spin {
@@ -514,3 +535,4 @@ button:hover {
   transform: scale(1.1) rotate(360deg);
   transition: all 0.4s ease;
 }
+
