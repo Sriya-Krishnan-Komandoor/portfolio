@@ -118,8 +118,6 @@
   <!-- Preloader -->
   <div id="preloader"></div>
 
-  
-
   <!-- Header -->
   <header id="header" class="header fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
@@ -129,11 +127,10 @@
         <ul>
           <li><a href="#resume">Resume</a></li>
           <li><a href="CV-OCT2025.pdf">Download CV</a></li>
-          <li><a href="#portfolio">Portfolio</a></li>  <!-- Inside dropdown -->
-          <li><a href="#contact">Contact</a></li>      <!-- Inside dropdown -->
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
-
-</nav>
+      </nav>
 
     </div>
   </header>
@@ -175,7 +172,7 @@
         <!-- Profile Card -->
         <div class="col-lg-3">
           <div class="profile-card">
-            <img src="img/Screenshot 2025-12-04 175038.png" class="img-fluid rounded" alt="Profile photo">
+            <img src="img/profile-photo.png" class="img-fluid rounded" alt="Profile photo">
 
             <div class="name-pronunciation mt-3">
               <h3>Sriya Krishnan Komandoor</h3>
@@ -278,12 +275,13 @@
         <li>Critical Thinking, Time management, Lesson planning</li>
         <li>Leadership, Creative writing</li>
       </ul>
+
       <h3>Technical Skills</h3>
       <ul>
         <li>Programming Languages:
           <ul>
             <li>Proficient: Python, Java, C++, JavaScript, MATLAB, PostgreSQL</li>
-            <li>Familiar: C, Oracle SQL, VHDL, </li>
+            <li>Familiar: C, Oracle SQL, VHDL</li>
           </ul>
         </li>
         <li>Web Development: HTML, CSS, JavaScript</li>
@@ -291,8 +289,7 @@
         <li>Data Analysis: Excel, Tableau</li>
       </ul>
 
-      <h4>Top Achievements (Ranked)</h4>
-
+      <h3>Top Achievements</h3>
       <ol class="custom-ordered-list">
         <li>Hack4Vilnius - Built AI-powered career consultant (ValueBridge)</li>
         <li>Baltic Sea Hackathon - Developed EdgeAI device (Walkey)</li>
@@ -301,7 +298,7 @@
         <li>GeeksforGeeks - Python DSA & Java backend certification</li>
       </ol>
 
-      <h4>Soft Skills</h4>
+      <h3>Soft Skills</h3>
       <ul class="custom-unordered-list">
         <li>Communication & Presentation</li>
         <li>Critical Thinking & Problem-solving</li>
@@ -411,7 +408,7 @@
           <p>A mobile app designed to track walking activities, promote healthy lifestyles, and gamify fitness goals.</p>
         </div>
         <div class="col-lg-4">
-          <img src="img/Screenshot 2025-12-04 215946.png" class="img-fluid" alt="HerBridge">
+          <img src="img/herbridge-screenshot.png" class="img-fluid" alt="HerBridge">
           <h4>HerBridge</h4>
           <p>A platform connecting women in tech, fostering mentorship, networking, and community building opportunities.</p>
         </div>
@@ -468,7 +465,7 @@
         <div class="media-block mb-5">
           <h4>YouTube Video Embed</h4>
           <div class="ratio ratio-16x9">
-            <iframe src="https://www.youtube.com/embed/KOW0hOw9WMQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/KOW0hOw9WMQ" title="YouTube video player" style="border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         </div>
       </div>
@@ -485,36 +482,40 @@
         <label for="name">Name:</label>
         <input type="text" class="infos" id="name" name="name" required pattern="[A-Za-z\s]+">
         <span id="nameError" class="error"></span>
+
         <div class="mario"></div>
+
         <label for="surname">Surname:</label>
         <input type="text" class="infos" id="surname" name="surname" required pattern="[A-Za-z\s]+">
         <span id="surnameError" class="error"></span>
+
         <label for="email">E-mail:</label>
         <input type="email" id="email" name="email" required>
         <span id="emailError" class="error"></span>
+
         <label for="phone">Phone:</label>
         <input type="tel" id="phone" name="phone" required placeholder="+370 6xx xxxxx">
         <span id="phoneError" class="error"></span>
-  
+
         <label for="address">Address:</label>
         <input type="text" class="infos" id="address" name="address" required>
         <span id="addressError" class="error"></span>
-  
+
         <label for="r1">Rating for the website (1-10):</label>
         <input type="number" id="r1" name="r1" min="1" max="10" required>
         <span id="r1Error" class="error"></span>
-  
+
         <label for="r2">Rating for the person (1-10):</label>
         <input type="number" id="r2" name="r2" min="1" max="10" required>
         <span id="r2Error" class="error"></span>
+
         <label for="r3">Rating for the quality (1-10):</label>
         <input type="number" id="r3" name="r3" min="1" max="10" required>
         <span id="r3Error" class="error"></span>
+
         <button type="button" id="submitBtn" disabled>Send</button>
         <button type="reset" id="limpar">Clear</button>
       </form>
-
-<div id="formResult"></div>
 
       <div id="formResult"></div>
     </div>
@@ -542,154 +543,6 @@
     function playNamePronunciation() {
       document.getElementById('namePronunciation').play();
     }
-
-    // MEMORY GAME - EMBEDDED VERSION
-    document.addEventListener("DOMContentLoaded", () => {
-      const symbols = ["🍎", "🚀", "🎧", "📘", "⚡", "🎮", "🐱", "🌙", "🎯", "💡", "🎵", "📸"];
-
-      let firstCard = null;
-      let secondCard = null;
-      let lockBoard = false;
-      let moves = 0;
-      let matches = 0;
-      let timer = 0;
-      let timerInterval = null;
-      let totalPairs = 0;
-      let bestScores = { easy: null, hard: null };
-
-      const board = document.getElementById("gameBoard");
-      const movesEl = document.getElementById("moves");
-      const matchesEl = document.getElementById("matches");
-      const timerEl = document.getElementById("timer");
-      const winMessage = document.getElementById("winMessage");
-      const bestScoreEl = document.getElementById("bestScore");
-      const difficultySelect = document.getElementById("difficulty");
-
-      function startTimer() {
-        clearInterval(timerInterval);
-        timer = 0;
-        if (timerEl) timerEl.textContent = timer;
-
-        timerInterval = setInterval(() => {
-          timer++;
-          if (timerEl) timerEl.textContent = timer;
-        }, 1000);
-      }
-
-      function createBoard(difficulty) {
-        if (!board) return;
-
-        board.innerHTML = "";
-        moves = 0;
-        matches = 0;
-        firstCard = null;
-        secondCard = null;
-        lockBoard = false;
-        clearInterval(timerInterval);
-        timer = 0;
-        if (timerEl) timerEl.textContent = timer;
-
-        if (movesEl) movesEl.textContent = moves;
-        if (matchesEl) matchesEl.textContent = matches;
-        if (winMessage) winMessage.textContent = "";
-
-        totalPairs = difficulty === "easy" ? 6 : 12;
-
-        board.style.gridTemplateColumns =
-          difficulty === "easy" ? "repeat(4, 1fr)" : "repeat(6, 1fr)";
-
-        const selectedSymbols = symbols.slice(0, totalPairs);
-        const cards = [...selectedSymbols, ...selectedSymbols]
-          .sort(() => Math.random() - 0.5);
-
-        cards.forEach(symbol => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.dataset.symbol = symbol;
-          card.addEventListener("click", () => flipCard(card));
-          board.appendChild(card);
-        });
-
-        // Display best score
-        const best = bestScores[difficulty];
-        if (bestScoreEl) bestScoreEl.textContent = best || "—";
-      }
-
-      function flipCard(card) {
-        if (lockBoard || card === firstCard || card.classList.contains("matched")) return;
-
-        card.textContent = card.dataset.symbol;
-        card.classList.add("flipped");
-
-        if (!firstCard) {
-          firstCard = card;
-          return;
-        }
-
-        secondCard = card;
-        moves++;
-        if (movesEl) movesEl.textContent = moves;
-
-        checkMatch();
-      }
-
-      function checkMatch() {
-        if (firstCard.dataset.symbol === secondCard.dataset.symbol) {
-          firstCard.classList.add("matched");
-          secondCard.classList.add("matched");
-          matches++;
-          if (matchesEl) matchesEl.textContent = matches;
-          resetTurn();
-
-          if (matches === totalPairs) {
-            winGame();
-          }
-        } else {
-          lockBoard = true;
-          setTimeout(() => {
-            firstCard.textContent = "";
-            secondCard.textContent = "";
-            firstCard.classList.remove("flipped");
-            secondCard.classList.remove("flipped");
-            resetTurn();
-          }, 1000);
-        }
-      }
-
-      function resetTurn() {
-        firstCard = null;
-        secondCard = null;
-        lockBoard = false;
-      }
-
-      function winGame() {
-        clearInterval(timerInterval);
-        if (winMessage) winMessage.textContent = `🎉 You won in ${moves} moves and ${timer} seconds!`;
-
-        const difficulty = difficultySelect.value;
-        const currentBest = bestScores[difficulty];
-
-        if (!currentBest || moves < currentBest) {
-          bestScores[difficulty] = moves;
-          if (bestScoreEl) bestScoreEl.textContent = moves;
-        }
-      }
-
-      document.getElementById("startGame")?.addEventListener("click", () => {
-        createBoard(difficultySelect.value);
-        startTimer();
-      });
-
-      document.getElementById("restartGame")?.addEventListener("click", () => {
-        createBoard(difficultySelect.value);
-        startTimer();
-      });
-
-      difficultySelect?.addEventListener("change", () => {
-        const best = bestScores[difficultySelect.value];
-        if (bestScoreEl) bestScoreEl.textContent = best || "—";
-      });
-    });
   </script>
 
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -703,6 +556,3 @@
 </body>
 
 </html>
-
-
-
