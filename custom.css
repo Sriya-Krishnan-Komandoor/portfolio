@@ -415,4 +415,102 @@ button:hover {
 90px 75px #de4513, 95px 75px #de4513, 100px 75px #de4513, 105px 75px #de4513,
 110px 75px #de4513, 115px 75px #de4513, 70px 80px #000, 85px 80px #de4513,
 90px 80px #de4513, 95px 80px #de4513;
+
+}
+
+/* =========================
+   CUSTOM LISTS (Lab 2 Optional Task)
+========================= */
+
+/* Unordered List with Custom Pseudo-elements */
+.custom-unordered-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 2rem;
+}
+
+.custom-unordered-list > li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+.custom-unordered-list > li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-size: 1.4rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+/* Nested List Styling */
+.nested-list {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.nested-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.nested-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #9fb7ff;
+  font-size: 1rem;
+}
+
+/* Ordered List with Custom Counters */
+.custom-ordered-list {
+  list-style: none;
+  counter-reset: achievement-counter;
+  padding-left: 0;
+  margin-bottom: 2rem;
+}
+
+.custom-ordered-list li {
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 1.2rem;
+  counter-increment: achievement-counter;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.custom-ordered-list li::before {
+  content: counter(achievement-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, var(--accent-color), #9fb7ff);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(111, 156, 255, 0.3);
+}
+
+/* Hover effects */
+.custom-unordered-list > li:hover::before {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+.custom-ordered-list li:hover::before {
+  transform: scale(1.1) rotate(360deg);
+  transition: all 0.4s ease;
 }
