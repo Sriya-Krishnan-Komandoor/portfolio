@@ -60,7 +60,9 @@
   ================================================== */
   const preloader = document.getElementById("preloader");
   if (preloader) {
-    window.addEventListener("load", () => preloader.remove());
+    window.addEventListener("load", () => {
+      setTimeout(() => preloader.remove(), 3000); // Shows for 3 seconds});
+    });
   }
 
   /* ==================================================
