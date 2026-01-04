@@ -115,6 +115,10 @@
 </head>
 
 <body class="index-page">
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  
 
   <!-- Header -->
   <header id="header" class="header fixed-top">
@@ -122,21 +126,18 @@
       <h1 class="logo"><a href="#hero">My Profile</a></h1>
 
       <nav id="navmenu">
-  <ul>
-    <li><a href="#hero" class="active">Home</a></li>
-    <li><a href="#about">About</a></li>
+        <ul>
+          <li class="dropdown">
+            <a href="#resume">Resume <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="resume.html">View Resume</a></li>
+              <li><a href="CV-OCT2025.pdf">Download CV</a></li>
+              <li><a href="#portfolio">Portfolio</a></li>  <!-- Inside dropdown -->
+              <li><a href="#contact">Contact</a></li>      <!-- Inside dropdown -->
+            </ul>
+          </li>
+        </ul>
 
-    <li class="dropdown">
-      <a href="#">Resume <i class="bi bi-chevron-down"></i></a>
-      <ul>
-        <li><a href="resume.html">View Resume</a></li>
-        <li><a href="CV-OCT2025.pdf">Download CV</a></li>
-      </ul>
-    </li>
-
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
 </nav>
 
     </div>
@@ -708,7 +709,6 @@
 </body>
 
 </html>
-
 
 
 
