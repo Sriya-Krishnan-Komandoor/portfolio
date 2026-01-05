@@ -129,15 +129,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Determine color based on average
       let color;
+      let emoji;
       if (avg <= 4) {
-        color = "red";
+        color = "#ff4444";
+        emoji = "😞";
       } else if (avg <= 7) {
-        color = "orange";
+        color = "#ff9500";
+        emoji = "😊";
       } else {
-        color = "green";
+        color = "#00c851";
+        emoji = "🎉";
       }
 
-      console.log("Average:", avg, "Color:", color); // DEBUG
+      console.log("Average:", avg, "Color:", color);
 
       const data = {
         name,
@@ -151,6 +155,84 @@ document.addEventListener("DOMContentLoaded", () => {
 
       console.log("Form Data:", data);
 
+      // Create custom styled popup
+      const popup = document.createElement('div');
+      popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.7);
+        background: linear-gradient(135deg, #1e2430 0%, #0f1115 100%);
+        padding: 40px 50px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        z-index: 10000;
+        text-align: center;
+        border: 2px solid ${color};
+        animation: popupAppear 0.4s ease forwards;
+      `;
+
+      popup.innerHTML = `
+        <style>
+          @keyframes popupAppear {
+            to { transform: translate(-50%, -50%) scale(1); }
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        </style>
+        <div style="
+          width: 120px;
+          height: 120px;
+          margin: 0 auto 20px;
+          border-radius: 50%;
+          background: conic-gradient(from 0deg, ${color}, transparent);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: spin 2s linear infinite;
+          position: relative;
+        ">
+          <div style="
+            width: 100px;
+            height: 100px;
+            background: #1e2430;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            color: ${color};
+          ">
+            ${avg.toFixed(1)}
+          </div>
+        </div>
+        <h2 style="color: ${color}; margin: 20px 0 10px; font-size: 28px;">
+          ${emoji} Average Rating
+        </h2>
+        <p style="color: #e6e9ef; font-size: 18px; margin-bottom: 25px;">
+          ${name} ${surname}
+        </p>
+        <button onclick="this.parentElement.remove()" style="
+          background: ${color};
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          Got it! ✓
+        </button>
+      `;
+
+      document.body.appendChild(popup);
+
+      // Also display in result box
       if (resultBox) {
         resultBox.innerHTML = `
           <p><strong>Name:</strong> ${name}</p>
@@ -159,13 +241,15 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Phone:</strong> ${phone}</p>
           <p><strong>Address:</strong> ${address}</p>
           <p style="color: ${color}; font-weight: 700; font-size: 1.5rem; margin-top: 20px;">
-            Average Rating: ${avg.toFixed(1)}
+            Average Rating: ${avg.toFixed(1)} ${emoji}
           </p>
         `;
         resultBox.style.display = "block";
       }
 
-      alert("Form submitted successfully!");
+      // Don't use alert anymore
+      // alert("Form submitted successfully!");
+      
       form.reset();
       
       // Reset errors
