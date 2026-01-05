@@ -1,163 +1,332 @@
-/* From Uiverse.io by guilhermeyohan - DARK THEME VERSION */ 
-form {
-  background: var(--bg-surface);
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 500px;
-  margin: 50px auto;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
-}
+/* ==================================================
+   CONTACT FORM HANDLER WITH VALIDATION
+================================================== */
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  margin-top: 15px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--accent-color);
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("contactForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const resultBox = document.getElementById("formResult");
 
-.infos[type="text"], 
-input[type="email"],
-input[type="tel"],
-input[type="number"] {
-  width: 100%;
-  padding: 12px 15px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 2px solid rgba(255,255,255,0.1);
-  background: var(--bg-elevated);
-  color: var(--text-main);
-  margin-bottom: 5px;
-  transition: border-color 0.3s ease;
-}
+  const fields = {
+    name: { regex: /^[a-zA-Z\s]+$/, error: "Name must contain only letters." },
+    surname: { regex: /^[a-zA-Z\s]+$/, error: "Surname must contain only letters." },
+    email: { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, error: "Invalid email format." },
+    phone: { regex: /^\+370\s6\d{2}\s\d{5}$/, error: "Phone must be in format +370 6xx xxxxx." },
+    address: { regex: /.+/, error: "Address cannot be empty." },
+    r1: { min: 1, max: 10, error: "Rating must be between 1 and 10." },
+    r2: { min: 1, max: 10, error: "Rating must be between 1 and 10." },
+    r3: { min: 1, max: 10, error: "Rating must be between 1 and 10." }
+  };
 
-.infos[type="text"]:focus, 
-input[type="email"]:focus,
-input[type="tel"]:focus,
-input[type="number"]:focus {
-  outline: none;
-  border-color: var(--accent-color);
-}
+  function validateField(fieldId) {
+    const input = document.getElementById(fieldId);
+    const errorSpan = document.getElementById(fieldId + "Error");
+    const value = input.value.trim();
+    let isValid = false;
 
-button {
-  background: var(--accent-color);
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-right: 10px;
-  margin-top: 20px;
-  transition: all 0.3s ease;
-}
+    if (fields[fieldId].regex) {
+      isValid = fields[fieldId].regex.test(value);
+    } else if (fields[fieldId].min !== undefined) {
+      const num = parseInt(value);
+      isValid = !isNaN(num) && num >= fields[fieldId].min && num <= fields[fieldId].max;
+    }
 
-button:hover {
-  background: #5a8aff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(111, 156, 255, 0.4);
-}
+    if (isValid) {
+      input.classList.remove("invalid");
+      errorSpan.textContent = "";
+    } else {
+      input.classList.add("invalid");
+      errorSpan.textContent = fields[fieldId].error;
+    }
+    return isValid;
+  }
 
-button:disabled {
-  background: #444;
-  cursor: not-allowed;
-  transform: none;
-}
+  function validateForm() {
+    let allValid = true;
+    Object.keys(fields).forEach(fieldId => {
+      if (!validateField(fieldId)) allValid = false;
+    });
+    submitBtn.disabled = !allValid;
+  }
 
-#limpar {
-  background: #dc3545;
-  color: white;
-}
+  // Phone masking - STRICT: Only allows +370 6xx xxxxx
+  const phoneInput = document.getElementById("phone");
+  
+  // Auto-fill +370 6 when field is focused and empty
+  phoneInput.addEventListener("focus", (e) => {
+    if (e.target.value === "") {
+      e.target.value = "+370 6";
+    }
+  });
 
-#limpar:hover {
-  background: #c82333;
-}
+  phoneInput.addEventListener("input", (e) => {
+    let value = e.target.value;
+    
+    // Extract only digits
+    let digits = value.replace(/\D/g, "");
+    
+    // Force it to start with 3706
+    if (!digits.startsWith("3706")) {
+      // If user tries to change the 6, reset to +370 6
+      e.target.value = "+370 6";
+      validateField("phone");
+      return;
+    }
+    
+    // Remove 3706 prefix to get remaining digits
+    let remaining = digits.substring(4);
+    
+    // Limit to 7 more digits (total: 370 + 6 + 7 = 11 digits)
+    if (remaining.length > 7) {
+      remaining = remaining.substring(0, 7);
+    }
+    
+    // Format as +370 6xx xxxxx
+    let formatted = "+370 6";
+    if (remaining.length > 0) {
+      formatted += remaining.substring(0, 2);
+      if (remaining.length > 2) {
+        formatted += " " + remaining.substring(2);
+      }
+    }
+    
+    e.target.value = formatted;
+    validateField("phone");
+  });
 
-.error {
-  color: #ff6b6b;
-  font-size: 0.85rem;
-  margin-top: 3px;
-  display: block;
-  min-height: 20px;
-}
+  // Add event listeners for validation
+  Object.keys(fields).forEach(fieldId => {
+    const input = document.getElementById(fieldId);
+    if (input && fieldId !== "phone") {
+      input.addEventListener("input", () => {
+        validateField(fieldId);
+        validateForm();
+      });
+    }
+  });
 
-.invalid {
-  border-color: #ff6b6b !important;
-}
+  // Phone validation on input (already handled above)
+  phoneInput.addEventListener("input", validateForm);
 
-.mario {
-  width: 5px;
-  height: 5px;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 20px 0;
-  box-shadow: 0 0 0 transparent, 130px 5px #ffa500, 135px 5px #ffa500,
-140px 5px #ffa500, 95px 10px #de4513, 100px 10px #de4513, 105px 10px #de4513,
-110px 10px #de4513, 115px 10px #de4513, 130px 10px #ffa500,
-135px 10px #ffa500, 140px 10px #ffa500, 90px 15px #de4513, 95px 15px #de4513,
-100px 15px #de4513, 105px 15px #de4513, 110px 15px #de4513,
-115px 15px #de4513, 120px 15px #de4513, 125px 15px #de4513,
-130px 15px hsl(15, 84%, 47%), 135px 15px #ffa500, 140px 15px #ffa500,
-90px 20px #a52a2a, 95px 20px #a52a2a, 100px 20px #a52a2a, 105px 20px #ffa500,
-110px 20px #ffa500, 115px 20px #000, 120px 20px #ffa500, 130px 20px #4545bb,
-135px 20px #4545bb, 140px 20px #4545bb, 85px 25px #a52a2a, 90px 25px #ffa500,
-95px 25px #a52a2a, 100px 25px #ffa500, 105px 25px #ffa500,
-110px 25px #ffa500, 115px 25px #000, 120px 25px #ffa500, 125px 25px #ffa500,
-130px 25px #4545bb, 135px 25px #4545bb, 140px 25px #4545bb,
-85px 30px #a52a2a, 90px 30px #ffa500, 95px 30px #a52a2a, 100px 30px #a52a2a,
-105px 30px #ffa500, 110px 30px #ffa500, 115px 30px #ffa500,
-120px 30px #a52a2a, 125px 30px #ffa500, 130px 30px #ffa500,
-135px 30px #ffa500, 140px 30px #4545bb, 85px 35px #a52a2a, 90px 35px #a52a2a,
-95px 35px #ffa500, 100px 35px #ffa500, 105px 35px #ffa500,
-110px 35px #ffa500, 115px 35px #a52a2a, 120px 35px #a52a2a,
-125px 35px #a52a2a, 130px 35px #a52a2a, 135px 35px #a52a2a,
-95px 40px #ffa500, 100px 40px #ffa500, 105px 40px #ffa500,
-110px 40px #ffa500, 115px 40px #ffa500, 120px 40px #ffa500,
-125px 40px #ffa500, 130px 40px #4545bb, 75px 45px #4545bb, 80px 45px #4545bb,
-85px 45px #4545bb, 90px 45px #4545bb, 95px 45px #4545bb, 100px 45px #de4513,
-105px 45px #4545bb, 110px 45px #4545bb, 115px 45px #4545bb,
-120px 45px #de4513, 125px 45px #4545bb, 70px 50px #4545bb, 75px 50px #4545bb,
-80px 50px #4545bb, 85px 50px #4545bb, 90px 50px #4545bb, 95px 50px #4545bb,
-100px 50px #4545bb, 105px 50px #de4513, 110px 50px #4545bb,
-115px 50px #4545bb, 120px 50px #4545bb, 125px 50px #de4513, 140px 50px #000,
-65px 55px #ffa500, 70px 55px #ffa500, 75px 55px #4545bb, 80px 55px #4545bb,
-85px 55px #4545bb, 90px 55px #4545bb, 95px 55px #4545bb, 100px 55px #4545bb,
-105px 55px #de4513, 110px 55px #de4513, 115px 55px #de4513,
-120px 55px #de4513, 125px 55px #de4513, 140px 55px #000, 65px 60px #ffa500,
-70px 60px #ffa500, 75px 60px #ffa500, 85px 60px #de4513, 90px 60px #de4513,
-95px 60px #4545bb, 100px 60px #de4513, 105px 60px #de4513, 110px 60px #ff0,
-115px 60px #de4513, 120px 60px #de4513, 125px 60px #ff0, 130px 60px #de4513,
-135px 60px #000, 140px 60px #000, 70px 65px #ffa500, 80px 65px #000,
-85px 65px #de4513, 90px 65px #de4513, 95px 65px #de4513, 100px 65px #de4513,
-105px 65px #de4513, 110px 65px #de4513, 115px 65px #de4513,
-120px 65px #de4513, 125px 65px #de4513, 130px 65px #de4513, 135px 65px #000,
-140px 65px #000, 75px 70px #000, 80px 70px #000, 85px 70px #000,
-90px 70px #de4513, 95px 70px #de4513, 100px 70px #de4513, 105px 70px #de4513,
-110px 70px #de4513, 115px 70px #de4513, 120px 70px #de4513,
-125px 70px #de4513, 130px 70px #de4513, 135px 70px #000, 140px 70px #000,
-70px 75px #000, 75px 75px #000, 80px 75px #000, 85px 75px #de4513,
-90px 75px #de4513, 95px 75px #de4513, 100px 75px #de4513, 105px 75px #de4513,
-110px 75px #de4513, 115px 75px #de4513, 70px 80px #000, 85px 80px #de4513,
-90px 80px #de4513, 95px 80px #de4513;
-}
+  if (form && submitBtn) {
+    submitBtn.addEventListener("click", (e) => {
+      e.preventDefault();
 
-/* Form result display */
-#formResult {
-  background: var(--bg-elevated);
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 30px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-}
+      if (!validateForm()) return;
 
-#formResult p {
-  color: var(--text-main);
-  margin: 10px 0;
-  font-size: 16px;
-}
+      const name = document.getElementById("name").value.trim();
+      const surname = document.getElementById("surname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+
+      const r1 = Number(document.getElementById("r1").value);
+      const r2 = Number(document.getElementById("r2").value);
+      const r3 = Number(document.getElementById("r3").value);
+
+      const ratings = [r1, r2, r3];
+      const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+
+      // Determine color based on average
+      let color;
+      if (avg <= 4) {
+        color = "red";
+      } else if (avg <= 7) {
+        color = "orange";
+      } else {
+        color = "green";
+      }
+
+      console.log("Average:", avg, "Color:", color); // DEBUG
+
+      const data = {
+        name,
+        surname,
+        email,
+        phone,
+        address,
+        ratings,
+        average: avg.toFixed(1)
+      };
+
+      console.log("Form Data:", data);
+
+      if (resultBox) {
+        resultBox.innerHTML = `
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Surname:</strong> ${surname}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Address:</strong> ${address}</p>
+          <p style="color: ${color}; font-weight: 700; font-size: 1.5rem; margin-top: 20px;">
+            Average Rating: ${avg.toFixed(1)}
+          </p>
+        `;
+        resultBox.style.display = "block";
+      }
+
+      alert("Form submitted successfully!");
+      form.reset();
+      
+      // Reset errors
+      Object.keys(fields).forEach(fieldId => {
+        document.getElementById(fieldId + "Error").textContent = "";
+        document.getElementById(fieldId).classList.remove("invalid");
+      });
+      
+      submitBtn.disabled = true;
+    });
+  }
+
+  /* ==================================================
+     MEMORY GAME
+  ================================================== */
+
+  const symbols = ["🍎", "🚀", "🎧", "📘", "⚡", "🎮", "🐱", "🌙", "🎯", "💡", "🎵", "📸"];
+
+  let firstCard = null;
+  let secondCard = null;
+  let lockBoard = false;
+  let moves = 0;
+  let matches = 0;
+  let timer = 0;
+  let timerInterval = null;
+  let totalPairs = 0;
+
+  const board = document.getElementById("gameBoard");
+  const movesEl = document.getElementById("moves");
+  const matchesEl = document.getElementById("matches");
+  const timerEl = document.getElementById("timer");
+  const winMessage = document.getElementById("winMessage");
+  const bestScoreEl = document.getElementById("bestScore");
+  const difficultySelect = document.getElementById("difficulty");
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timer = 0;
+    if (timerEl) timerEl.textContent = timer;
+
+    timerInterval = setInterval(() => {
+      timer++;
+      if (timerEl) timerEl.textContent = timer;
+    }, 1000);
+  }
+
+  function createBoard(difficulty) {
+    if (!board) return;
+
+    board.innerHTML = "";
+    moves = 0;
+    matches = 0;
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+    clearInterval(timerInterval);
+    timer = 0;
+    if (timerEl) timerEl.textContent = timer;
+
+    if (movesEl) movesEl.textContent = moves;
+    if (matchesEl) matchesEl.textContent = matches;
+    if (winMessage) winMessage.textContent = "";
+
+    totalPairs = difficulty === "easy" ? 6 : 12;
+
+    board.style.gridTemplateColumns =
+      difficulty === "easy" ? "repeat(4, 1fr)" : "repeat(6, 1fr)";
+
+    const selectedSymbols = symbols.slice(0, totalPairs);
+    const cards = [...selectedSymbols, ...selectedSymbols]
+      .sort(() => Math.random() - 0.5);
+
+    cards.forEach(symbol => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.symbol = symbol;
+      card.addEventListener("click", () => flipCard(card));
+      board.appendChild(card);
+    });
+
+    // Load best score from localStorage
+    const bestKey = `best-${difficulty}`;
+    const best = localStorage.getItem(bestKey);
+    if (bestScoreEl) bestScoreEl.textContent = best || "—";
+  }
+
+  function flipCard(card) {
+    if (lockBoard || card === firstCard || card.classList.contains("matched")) return;
+
+    card.textContent = card.dataset.symbol;
+    card.classList.add("flipped");
+
+    if (!firstCard) {
+      firstCard = card;
+      return;
+    }
+
+    secondCard = card;
+    moves++;
+    if (movesEl) movesEl.textContent = moves;
+
+    checkMatch();
+  }
+
+  function checkMatch() {
+    if (firstCard.dataset.symbol === secondCard.dataset.symbol) {
+      firstCard.classList.add("matched");
+      secondCard.classList.add("matched");
+      matches++;
+      if (matchesEl) matchesEl.textContent = matches;
+      resetTurn();
+
+      if (matches === totalPairs) {
+        winGame();
+      }
+    } else {
+      lockBoard = true;
+      setTimeout(() => {
+        firstCard.textContent = "";
+        secondCard.textContent = "";
+        firstCard.classList.remove("flipped");
+        secondCard.classList.remove("flipped");
+        resetTurn();
+      }, 1000);
+    }
+  }
+
+  function resetTurn() {
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+  }
+
+  function winGame() {
+    clearInterval(timerInterval);
+    if (winMessage) winMessage.textContent = `🎉 You won in ${moves} moves and ${timer} seconds!`;
+
+    const difficulty = difficultySelect.value;
+    const bestKey = `best-${difficulty}`;
+    const best = localStorage.getItem(bestKey);
+
+    if (!best || moves < best) {
+      localStorage.setItem(bestKey, moves);
+      if (bestScoreEl) bestScoreEl.textContent = moves;
+    }
+  }
+
+  document.getElementById("startGame")?.addEventListener("click", () => {
+    createBoard(difficultySelect.value);
+    startTimer();
+  });
+
+  document.getElementById("restartGame")?.addEventListener("click", () => {
+    createBoard(difficultySelect.value);
+    startTimer();
+  });
+
+  difficultySelect?.addEventListener("change", () => {
+    const difficulty = difficultySelect.value;
+    const bestKey = `best-${difficulty}`;
+    const best = localStorage.getItem(bestKey);
+    if (bestScoreEl) bestScoreEl.textContent = best || "—";
+  });
+});
