@@ -112,7 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.addEventListener("click", (e) => {
       e.preventDefault();
 
-      if (!validateForm()) return;
+      // Validate all fields first
+      let allValid = true;
+      Object.keys(fields).forEach(fieldId => {
+        if (!validateField(fieldId)) allValid = false;
+      });
+
+      if (!allValid) {
+        alert("Please fill in all fields correctly!");
+        return;
+      }
 
       const name = document.getElementById("name").value.trim();
       const surname = document.getElementById("surname").value.trim();
@@ -154,6 +163,20 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       console.log("Form Data:", data);
+
+      // Create backdrop
+      const backdrop = document.createElement('div');
+      backdrop.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+        animation: fadeIn 0.3s ease;
+      `;
+      backdrop.innerHTML = `<style>@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }</style>`;
 
       // Create custom styled popup
       const popup = document.createElement('div');
@@ -218,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <p style="color: #9aa3b2; font-size: 16px; margin-bottom: 25px;">
           ${name} ${surname}
         </p>
-        <button onclick="this.parentElement.remove()" style="
+        <button onclick="this.parentElement.parentElement.remove(); document.querySelector('.popup-backdrop')?.remove()" style="
           background: #00c851;
           color: white;
           border: none;
@@ -233,7 +256,9 @@ document.addEventListener("DOMContentLoaded", () => {
         </button>
       `;
 
-      document.body.appendChild(popup);
+      backdrop.className = 'popup-backdrop';
+      backdrop.appendChild(popup);
+      document.body.appendChild(backdrop);
 
       // Also display in result box with proper format
       if (resultBox) {
