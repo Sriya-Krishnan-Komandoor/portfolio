@@ -49,30 +49,64 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.disabled = !allValid;
   }
 
-  // Phone masking
-  document.getElementById("phone").addEventListener("input", (e) => {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.startsWith("370")) {
-      value = value.substring(3);
+  // Phone masking - STRICT: Only allows +370 6xx xxxxx
+  const phoneInput = document.getElementById("phone");
+  
+  // Auto-fill +370 6 when field is focused and empty
+  phoneInput.addEventListener("focus", (e) => {
+    if (e.target.value === "") {
+      e.target.value = "+370 6";
     }
-    if (value.length > 9) value = value.substring(0, 9);
-    let formatted = "+370 ";
-    if (value.length > 2) {
-      formatted += value.substring(0, 3) + " " + value.substring(3);
-    } else {
-      formatted += value;
+  });
+
+  phoneInput.addEventListener("input", (e) => {
+    let value = e.target.value;
+    
+    // Extract only digits
+    let digits = value.replace(/\D/g, "");
+    
+    // Force it to start with 3706
+    if (!digits.startsWith("3706")) {
+      // If user tries to change the 6, reset to +370 6
+      e.target.value = "+370 6";
+      validateField("phone");
+      return;
     }
+    
+    // Remove 3706 prefix to get remaining digits
+    let remaining = digits.substring(4);
+    
+    // Limit to 7 more digits (total: 370 + 6 + 7 = 11 digits)
+    if (remaining.length > 7) {
+      remaining = remaining.substring(0, 7);
+    }
+    
+    // Format as +370 6xx xxxxx
+    let formatted = "+370 6";
+    if (remaining.length > 0) {
+      formatted += remaining.substring(0, 2);
+      if (remaining.length > 2) {
+        formatted += " " + remaining.substring(2);
+      }
+    }
+    
     e.target.value = formatted;
     validateField("phone");
   });
 
   // Add event listeners for validation
   Object.keys(fields).forEach(fieldId => {
-    document.getElementById(fieldId).addEventListener("input", () => {
-      validateField(fieldId);
-      validateForm();
-    });
+    const input = document.getElementById(fieldId);
+    if (input && fieldId !== "phone") {
+      input.addEventListener("input", () => {
+        validateField(fieldId);
+        validateForm();
+      });
+    }
   });
+
+  // Phone validation on input (already handled above)
+  phoneInput.addEventListener("input", validateForm);
 
   if (form && submitBtn) {
     submitBtn.addEventListener("click", (e) => {
@@ -93,10 +127,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const ratings = [r1, r2, r3];
       const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
 
-      const color =
-        avg < 4 ? "red" :
-        avg < 7 ? "orange" :
-        "green";
+      // Determine color based on average
+      let color;
+      if (avg >= 0 && avg <= 4) {
+        color = "red";
+      } else if (avg > 4 && avg <= 7) {
+        color = "orange";
+      } else if (avg > 7 && avg <= 10) {
+        color = "green";
+      }
 
       const data = {
         name,
@@ -117,19 +156,21 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Phone:</strong> ${phone}</p>
           <p><strong>Address:</strong> ${address}</p>
-          <p style="color:${color}; font-weight:600;">
-            Rating Average: ${avg.toFixed(1)}
+          <p style="color:${color}; font-weight:600; font-size: 1.2rem;">
+            ${name} ${surname}: ${avg.toFixed(1)}
           </p>
         `;
       }
 
       alert("Form submitted successfully!");
       form.reset();
+      
       // Reset errors
       Object.keys(fields).forEach(fieldId => {
         document.getElementById(fieldId + "Error").textContent = "";
         document.getElementById(fieldId).classList.remove("invalid");
       });
+      
       submitBtn.disabled = true;
     });
   }
@@ -202,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
       board.appendChild(card);
     });
 
-    // Load best score
+    // Load best score from localStorage
     const bestKey = `best-${difficulty}`;
     const best = localStorage.getItem(bestKey);
     if (bestScoreEl) bestScoreEl.textContent = best || "—";
@@ -257,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function winGame() {
     clearInterval(timerInterval);
-    if (winMessage) winMessage.textContent = "🎉 You won the game!";
+    if (winMessage) winMessage.textContent = `🎉 You won in ${moves} moves and ${timer} seconds!`;
 
     const difficulty = difficultySelect.value;
     const bestKey = `best-${difficulty}`;
@@ -280,6 +321,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   difficultySelect?.addEventListener("change", () => {
-    createBoard(difficultySelect.value);
+    const difficulty = difficultySelect.value;
+    const bestKey = `best-${difficulty}`;
+    const best = localStorage.getItem(bestKey);
+    if (bestScoreEl) bestScoreEl.textContent = best || "—";
   });
 });
