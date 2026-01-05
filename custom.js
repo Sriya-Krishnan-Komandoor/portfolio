@@ -209,14 +209,17 @@ document.addEventListener("DOMContentLoaded", () => {
             ${avg.toFixed(1)}
           </div>
         </div>
-        <h2 style="color: ${color}; margin: 20px 0 10px; font-size: 28px;">
-          ${emoji} Average Rating
+        <h2 style="color: #00c851; margin: 20px 0 10px; font-size: 28px;">
+          ✓ Form Submitted Successfully!
         </h2>
-        <p style="color: #e6e9ef; font-size: 18px; margin-bottom: 25px;">
+        <p style="color: #e6e9ef; font-size: 18px; margin-bottom: 10px;">
+          Average Rating: <span style="color: ${color}; font-weight: 700;">${avg.toFixed(1)}</span> ${emoji}
+        </p>
+        <p style="color: #9aa3b2; font-size: 16px; margin-bottom: 25px;">
           ${name} ${surname}
         </p>
         <button onclick="this.parentElement.remove()" style="
-          background: ${color};
+          background: #00c851;
           color: white;
           border: none;
           padding: 12px 30px;
@@ -232,23 +235,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.body.appendChild(popup);
 
-      // Also display in result box
+      // Also display in result box with proper format
       if (resultBox) {
         resultBox.innerHTML = `
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Surname:</strong> ${surname}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>Address:</strong> ${address}</p>
-          <p style="color: ${color}; font-weight: 700; font-size: 1.5rem; margin-top: 20px;">
-            Average Rating: ${avg.toFixed(1)} ${emoji}
-          </p>
+          <div style="background: var(--bg-surface); padding: 2rem; border-radius: 12px; margin-top: 2rem;">
+            <h3 style="color: var(--accent-color); margin-bottom: 1rem;">Form Results</h3>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Surname:</strong> ${surname}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Address:</strong> ${address}</p>
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 1.5rem 0;">
+            <p style="font-size: 1.3rem; margin-top: 1rem;">
+              <strong>${name} ${surname}:</strong> 
+              <span style="color: ${color}; font-weight: 700; font-size: 1.5rem;">
+                ${avg.toFixed(1)}
+              </span> ${emoji}
+            </p>
+          </div>
         `;
         resultBox.style.display = "block";
       }
-
-      // Don't use alert anymore
-      // alert("Form submitted successfully!");
       
       form.reset();
       
